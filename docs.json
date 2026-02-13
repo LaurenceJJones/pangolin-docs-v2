@@ -22,7 +22,7 @@
                         ]
                     },
                     {
-                        "group": "Manage Pangolin",
+                        "group": "Manage",
                         "pages": [
                             {
                                 "group": "Sites",
@@ -66,38 +66,66 @@
                                 "icon": "desktop",
                                 "pages": [
                                     "manage/clients/understanding-clients",
-                                    "manage/clients/install-client",
-                                    "manage/clients/configure-client",
-                                    "manage/clients/update-client",
-                                    "manage/clients/credentials",
-                                    "manage/clients/fingerprinting",
-                                    "manage/clients/archiving-blocking"
+                                    {
+                                        "group": "User Devices",
+                                        "icon": "mobile-screen",
+                                        "pages": [
+                                            "manage/clients/install-client",
+                                            "manage/clients/user-device-authentication",
+                                            "manage/clients/configure-client",
+                                            "manage/clients/update-client",
+                                            "manage/clients/credentials",
+                                            "manage/clients/fingerprinting",
+                                            "manage/clients/archiving-blocking",
+                                            "manage/clients/user-device-troubleshooting"
+                                        ]
+                                    },
+                                    {
+                                        "group": "Machine Clients",
+                                        "icon": "server",
+                                        "pages": [
+                                            "manage/clients/install-machine-client",
+                                            "manage/clients/create-machine-client",
+                                            "manage/clients/machine-client-operations",
+                                            "manage/clients/machine-client-security",
+                                            "manage/clients/machine-client-troubleshooting"
+                                        ]
+                                    }
                                 ]
                             },
                             "manage/domains",
                             {
-                                "group": "Organizations",
-                                "icon": "building",
+                                "group": "Remote Nodes",
+                                "icon": "circle-nodes",
                                 "pages": [
-                                    "manage/organizations/org-id"
+                                    "manage/remote-node/understanding-nodes",
+                                    "manage/remote-node/quick-install-remote",
+                                    "manage/remote-node/config-file"
                                 ]
-                            },
+                            }
+                        ]
+                    },
+                    {
+                        "group": "Access",
+                        "pages": [
                             {
-                                "group": "Access Control",
+                                "group": "Users",
                                 "icon": "user-group",
                                 "pages": [
                                     "manage/access-control/create-user",
-                                    "manage/access-control/approvals",
-                                    "manage/access-control/rules",
-                                    "manage/access-control/forwarded-headers",
-                                    "manage/access-control/login-page",
-                                    "manage/geoblocking",
-                                    "manage/asnblocking",
+                                    "manage/access-control/invitations",
                                     "manage/access-control/mfa",
+                                    "manage/access-control/change-password",
                                     "manage/access-control/password-rotation",
                                     "manage/access-control/session-length",
-                                    "manage/access-control/change-password",
                                     "manage/access-control/security-keys"
+                                ]
+                            },
+                            {
+                                "group": "Roles",
+                                "icon": "shield",
+                                "pages": [
+                                    "manage/access-control/roles"
                                 ]
                             },
                             {
@@ -114,26 +142,89 @@
                                 ]
                             },
                             {
-                                "group": "Logs & Analytics",
+                                "group": "Approval Requests",
+                                "icon": "clipboard-check",
+                                "pages": [
+                                    "manage/access-control/approvals"
+                                ]
+                            },
+                            {
+                                "group": "Links",
+                                "icon": "link",
+                                "pages": [
+                                    "manage/access-control/links"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "group": "Logs & Analytics",
+                        "pages": [
+                            {
+                                "group": "Analytics",
                                 "icon": "chart-bar",
+                                "pages": [
+                                    "manage/analytics/overview"
+                                ]
+                            },
+                            {
+                                "group": "Logs",
+                                "icon": "clipboard-list",
                                 "pages": [
                                     "manage/analytics/request",
                                     "manage/analytics/access",
                                     "manage/analytics/action"
                                 ]
-                            },
-                            "manage/blueprints",
+                            }
+                        ]
+                    },
+                    {
+                        "group": "Organization",
+                        "pages": [
                             {
-                                "group": "Remote Nodes",
-                                "icon": "circle-nodes",
+                                "group": "Integration API",
+                                "icon": "code",
                                 "pages": [
-                                    "manage/remote-node/understanding-nodes",
-                                    "manage/remote-node/quick-install-remote",
-                                    "manage/remote-node/config-file"
+                                    "manage/integration-api"
                                 ]
                             },
-                            "manage/integration-api",
-                            "manage/branding"
+                            {
+                                "group": "API Keys",
+                                "icon": "key",
+                                "pages": [
+                                    "manage/organizations/api-keys"
+                                ]
+                            },
+                            {
+                                "group": "Blueprints",
+                                "icon": "cubes",
+                                "pages": [
+                                    "manage/blueprints"
+                                ]
+                            },
+                            {
+                                "group": "Settings",
+                                "icon": "gear",
+                                "pages": [
+                                    "manage/organizations/settings",
+                                    "manage/access-control/login-page",
+                                    "manage/branding"
+                                ]
+                            },
+                            {
+                                "group": "Billing",
+                                "icon": "credit-card",
+                                "pages": [
+                                    "manage/organizations/billing"
+                                ]
+                            },
+                            {
+                                "group": "Licenses",
+                                "icon": "id-card",
+                                "pages": [
+                                    "manage/organizations/licenses"
+                                ]
+                            }
                         ]
                     },
                     {
