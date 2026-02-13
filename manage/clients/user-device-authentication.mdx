@@ -1,22 +1,79 @@
 ---
-title: "User Device Authentication"
+title: "Authentication"
 icon: "user-lock"
 description: "How users authenticate and connect from desktop and mobile clients."
 ---
 
-!TODO: Expand this scaffold page with complete product documentation.
+import PangolinCloudTocCta from "/snippets/pangolin-cloud-toc-cta.mdx";
 
-This page should explain how user devices authenticate and establish sessions with Pangolin.
+<PangolinCloudTocCta />
 
-## Include In This Page
 
-- Supported login methods (Pangolin account and external identity providers)
-- Session behavior and re-authentication expectations
-- MFA and security key flows from a client perspective
-- Common authentication errors and what they usually mean
+
+User device authentication controls how people sign in to Pangolin clients and establish trusted sessions on desktop and mobile devices.
+
+Use this page to understand sign-in behavior, multi-factor prompts, and what to check when authentication fails.
+
+## Supported Authentication Methods
+
+- Pangolin account login
+- External identity provider login (for example OIDC/SAML setups configured by your organization)
+- Multi-factor authentication (MFA), including authenticator app and passkey/security key flows when enabled
+
+## How Authentication Works
+
+1. Install and open the Pangolin client on your device.
+2. Start the login flow from the client UI.
+3. Authenticate with your configured provider.
+4. Complete any required MFA challenge.
+5. Return to the client to finish session establishment.
+
+After successful authentication, the client establishes a session tied to your organization and device context.
+
+## Session Behavior
+
+- Sessions can expire based on your organization policies.
+- Re-authentication may be required after session expiry, policy changes, or account security events.
+- If your organization enforces stronger controls, additional prompts can appear during sign-in.
+
+For admin-side policy controls, see [Session Length](/manage/access-control/session-length).
+
+## MFA and Security Keys
+
+- If MFA is enabled for your account or organization, the client login flow requires a second factor.
+- Supported second-factor methods depend on your account setup and organization policy.
+- Security keys/passkeys are supported when configured in your account and accepted by the active identity flow.
+
+For setup and policy details, see [Multi-Factor Authentication](/manage/access-control/mfa) and [Security Keys](/manage/access-control/security-keys).
+
+## Common Authentication Issues
+
+### Login Succeeds in Browser but Client Does Not Connect
+
+- Re-open the client and retry login.
+- Confirm your device can reach your Pangolin endpoint.
+- Verify system clock/timezone is correct.
+
+### Repeated MFA Prompts
+
+- Check whether your organization enforces short session durations.
+- Confirm the selected MFA method is available and correctly configured on your account.
+
+### Identity Provider Error During Sign-In
+
+- Confirm your user is assigned in the identity provider.
+- Verify organization IdP configuration and callback settings.
+- Retry from a fresh login attempt in the client.
+
+### Access Denied After Login
+
+- Confirm your user has required permissions and role assignments.
+- Review access rules on the target application/resource.
 
 ## Related Documentation
 
 - [Install Client](/manage/clients/install-client)
 - [Multi-Factor Authentication](/manage/access-control/mfa)
+- [Security Keys](/manage/access-control/security-keys)
+- [Session Length](/manage/access-control/session-length)
 - [Identity Providers](/manage/identity-providers/add-an-idp)

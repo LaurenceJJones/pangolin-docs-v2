@@ -43,6 +43,7 @@
                                     "manage/resources/understanding-resources",
                                     {
                                         "group": "Public Resources",
+                                        "icon": "globe",
                                         "pages": [
                                             "manage/resources/public/authentication",
                                             "manage/resources/public/targets",
@@ -53,12 +54,23 @@
                                     },
                                     {
                                         "group": "Private Resources",
+                                        "icon": "lock",
                                         "pages": [
                                             "manage/resources/private/authentication",
                                             "manage/resources/private/destinations",
                                             "manage/resources/private/alias"
                                         ]
-                                    }
+                                    },
+                                    {
+                                        "group": "Rules",
+                                        "icon": "gears",
+                                        "pages": [
+                                            "manage/access-control/rules",
+                                            "manage/geoblocking",
+                                            "manage/asnblocking"
+                                        ]
+                                    },
+                                    "manage/access-control/forwarded-headers"
                                 ]
                             },
                             {
@@ -148,13 +160,7 @@
                                     "manage/access-control/approvals"
                                 ]
                             },
-                            {
-                                "group": "Links",
-                                "icon": "link",
-                                "pages": [
-                                    "manage/access-control/links"
-                                ]
-                            }
+                            "manage/access-control/links"
                         ]
                     },
                     {
