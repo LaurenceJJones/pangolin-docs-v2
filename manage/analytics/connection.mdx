@@ -1,21 +1,21 @@
 ---
-title: "Connection Logs"
-description: "Connection logs are a record of TCP and UDP sessions between Pangolin clients and private site resources"
+title: "Network Logs"
+description: "Network logs are a record of TCP and UDP sessions between clients and private resources on sites"
 ---
 
 import PangolinCloudTocCta from "/snippets/pangolin-cloud-toc-cta.mdx";
 
 <PangolinCloudTocCta />
 
-Connection logs record each TCP and UDP session that traverses the tunnel between Pangolin clients and resources on your sites. They apply to private resources reached through the Pangolin client (and related tunnel traffic), not to public resources served only through the reverse proxy. You can see which clients and users opened sessions to which private resources, the source and destination addresses and protocols (TCP and UDP), the start and end times of the sessions, and more.
+Network logs record each TCP and UDP session that traverses the tunnel between Pangolin clients and resources on your sites. They apply to private resources reached through the Pangolin client (and related tunnel traffic), not to public resources served only through the reverse proxy. You can see which clients and users opened sessions to which private resources, the source and destination addresses and protocols (TCP and UDP), the start and end times of the sessions, and more.
 
 <Note>
-Connection logs are only available in [Pangolin Cloud](https://app.pangolin.net/auth/signup) or self-hosted [Enterprise Edition](/self-host/enterprise-edition).
+Network logs are only available in [Pangolin Cloud](https://app.pangolin.net/auth/signup) or self-hosted [Enterprise Edition](/self-host/enterprise-edition).
 </Note>
 
-## What are Connection Logs?
+## What are Network Logs?
 
-Connection logs capture tunnel sessions from clients to private resources. They are useful for:
+Network logs capture tunnel sessions from clients to private resources. They are useful for:
 
 - Observing which clients and users opened sessions to which private resources
 - Reviewing source and destination addresses and protocols (TCP and UDP)
@@ -23,11 +23,11 @@ Connection logs capture tunnel sessions from clients to private resources. They 
 - Auditing session start and end times for troubleshooting and compliance
 
 
-<Tip>Make sure to enable connection logging in the org settings</Tip>
+<Tip>Make sure to enable network logging in the org settings</Tip>
 
-## Connection Log Fields
+## Network Log Fields
 
-Each connection log entry contains the following fields:
+Each network log entry contains the following fields:
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -44,10 +44,10 @@ Each connection log entry contains the following fields:
 
 ## Log Retention
 
-Connection log retention is controlled by the organization setting. By default, connection logs are retained for 0 days (disabled).
+Network log retention is controlled by the organization setting. By default, network logs are retained for 0 days (disabled).
 
 <Note>
-Connection logs can generate significant data volume depending on session churn and traffic. Consider your storage capacity when configuring retention periods.
+Network logs can generate significant data volume depending on session churn and traffic. Consider your storage capacity when configuring retention periods.
 </Note>
 
 ## Exporting

@@ -1,5 +1,5 @@
 ---
-title: "Request Logs"
+title: "HTTPS Request Logs"
 description: "Request logs are a record of each HTTP request to a resource"
 ---
 
@@ -9,11 +9,11 @@ import PangolinCloudTocCta from "/snippets/pangolin-cloud-toc-cta.mdx";
 
 
 
-Request logs provide detailed information about every HTTP request made to your Pangolin resources. These logs capture both successful and denied requests along with comprehensive request metadata.
+HTTPS Request logs provide detailed information about every HTTP request made to your Pangolin resources. These logs capture both successful and denied requests along with comprehensive request metadata.
 
-## What are Request Logs?
+## What are HTTPS Request Logs?
 
-Request logs capture every HTTP request that passes through Pangolin's reverse proxy, including the request details, the decision made (allow or deny), and the reason for that decision. These logs are useful for:
+HTTPS Request logs capture every HTTPS request that passes through a reverse proxy, including the request details, the decision made (allow or deny), and the reason for that decision. These logs are useful for:
 
 - Monitoring traffic patterns and request volumes
 - Debugging access issues and rule configurations
@@ -26,9 +26,9 @@ Request logs capture every HTTP request that passes through Pangolin's reverse p
   <img src="/images/request_logs.png" centered/>
 </Frame>
 
-## Request Log Fields
+## HTTPS Request Log Fields
 
-Each request log entry contains the following fields:
+Each HTTPS request log entry contains the following fields:
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -54,10 +54,10 @@ Each request log entry contains the following fields:
 
 ## Log Retention
 
-Request log retention is controlled by the organization setting. By default, request logs are retained for 7 days.
+HTTPS Request log retention is controlled by the organization setting. By default, HTTPS request logs are retained for 7 days.
 
 <Note>
-Request logs can generate significant data volume depending on your traffic. Consider your storage capacity when configuring retention periods.
+HTTPS Request logs can generate significant data volume depending on your traffic. Consider your storage capacity when configuring retention periods.
 </Note>
 
 ## Exporting

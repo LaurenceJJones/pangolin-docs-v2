@@ -1,6 +1,6 @@
 ---
-title: "Access Logs"
-description: "Access logs are a record of each access attempt to a Pangolin resource"
+title: "Authentication Logs"
+description: "Authentication logs are a record of each authenticated access attempt to a resource"
 ---
 
 import PangolinCloudTocCta from "/snippets/pangolin-cloud-toc-cta.mdx";
@@ -9,15 +9,15 @@ import PangolinCloudTocCta from "/snippets/pangolin-cloud-toc-cta.mdx";
 
 
 
-Access logs provide detailed information about each access attempt made to your Pangolin resources. These logs help you monitor and analyze user activity each time they attempt to authenticate.
+Authentication logs provide detailed information about each access attempt made to your Pangolin resources. These logs help you monitor and analyze user activity each time they attempt to authenticate.
 
 <Note>
-Access logs are only available in [Pangolin Cloud](https://app.pangolin.net/auth/signup) or self-hosted [Enterprise Edition](/self-host/enterprise-edition).
+Authentication logs are only available in [Pangolin Cloud](https://app.pangolin.net/auth/signup) or self-hosted [Enterprise Edition](/self-host/enterprise-edition).
 </Note>
 
-## What are Access Logs?
+## What are Authentication Logs?
 
-Access logs capture authentication events when users or API keys attempt to access a resource. They record whether the authentication was successful or failed, along with contextual information about the attempt. These logs are useful for:
+Authentication logs capture authentication events when users or API keys attempt to access a resource. They record whether the authentication was successful or failed, along with contextual information about the attempt. These logs are useful for:
 
 - Monitoring authentication patterns and login attempts
 - Tracking which users are accessing which resources
@@ -29,11 +29,11 @@ Access logs capture authentication events when users or API keys attempt to acce
   <img src="/images/access_logs.png" centered/>
 </Frame>
 
-<Tip>Make sure to enable access logs in the org settings</Tip>
+<Tip>Make sure to enable authentication logs in the org settings</Tip>
 
-## Access Log Fields
+## Authentication Log Fields
 
-Each access log entry contains the following fields:
+Each authentication log entry contains the following fields:
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -51,7 +51,7 @@ Each access log entry contains the following fields:
 
 ## Log Retention
 
-Access log retention is controlled by the organization setting. By default, access logs are retained for 0 days (disabled).
+Authentication log retention is controlled by the organization setting. By default, authentication logs are retained for 0 days (disabled).
 
 ## Exporting
 
