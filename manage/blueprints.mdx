@@ -1008,7 +1008,7 @@ private-resources:
       </ResponseField>
 
       <ResponseField name="tcp-ports" type="string">
-        Allowed TCP ports or ranges.
+        Allowed TCP ports or ranges. Use comma-separated values for multiple ports or ranges, such as `22,443,8000-9000` or `*` for all ports or leave empty for no ports.
 
         **Default**: `*`
 
@@ -1017,7 +1017,7 @@ private-resources:
       </ResponseField>
 
       <ResponseField name="udp-ports" type="string">
-        Allowed UDP ports or ranges.
+        Allowed UDP ports or ranges. Use comma-separated values for multiple ports or ranges, such as `22,443,8000-9000` or `*` for all ports or leave empty for no ports.
 
         **Default**: `*`
 
