@@ -133,7 +133,14 @@
                                     "manage/analytics/streaming"
                                 ]
                             },
-                            "manage/blueprints",
+                            {
+                                "group": "Blueprints",
+                                "icon": "file-code",
+                                "pages": [
+                                    "manage/blueprints",
+                                    "manage/community-blueprints-repo"
+                                ]
+                            },
                             {
                                 "group": "Remote Nodes",
                                 "icon": "circle-nodes",
