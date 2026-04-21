@@ -1,6 +1,5 @@
 ---
-title: "Blueprints"
-icon: "file-code"
+title: "Definition"
 description: "Define Pangolin resources and site settings declaratively with YAML or container labels"
 ---
 
@@ -184,14 +183,14 @@ public-resources:
 
 ```yaml
 public-resources:
-  minecraft:
-    name: Minecraft
+  mqtt:
+    name: Mosquitto MQTT
     protocol: tcp
-    proxy-port: 25565
+    proxy-port: 1883
     targets:
       - site: my-site
-        hostname: game-server
-        port: 25565
+        hostname: mqtt-server
+        port: 1883
 ```
 
 For raw resources:
