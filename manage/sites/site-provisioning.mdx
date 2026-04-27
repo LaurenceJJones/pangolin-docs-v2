@@ -47,7 +47,7 @@ Pass the key with **`--provisioning-key`** instead of storing it in the file. Yo
 newt --config-file /var/newt.json --endpoint https://app.pangolin.net --provisioning-key 'spk_...'
 ```
 
-**After the site is provisioned**, Newt writes the new `id` and `secret` into that config file. On later runs, Newt uses those credentials and ignores the provisioning key (CLI flag or file field), because valid ID and secret are already present. If you used `provisioningKey` in JSON, that entry is removed when the file is updated, so the long-lived token is not left on disk.
+**After the site is provisioned**, Newt writes the new `id` and `secret` into that config file. On later runs, Newt uses those credentials and ignores the provisioning key (CLI flag or file field), because valid ID and secret are already present. If you used `provisioningKey` in JSON, that entry is removed when the file is updated, so the long-lived token is not left on disk. If you pass `--provisioning-key` instead, Newt does not write that key into the config file, but anything that launched Newt with the flag may still contain it.
 
 From there Newt authenticates over the websocket, optionally applies a blueprint if you passed one, then brings the tunnel online. The high-level sequence is summarized below.
 
@@ -144,4 +144,3 @@ Optionally, sites provisioned with a key can be placed into a pending state. The
 <Frame>
   <img src="/images/pending-sites.png" alt="Pending sites listed for admin review" centered />
 </Frame>
-
