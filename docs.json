@@ -55,9 +55,10 @@
                                         "pages": [
                                             "manage/resources/public/authentication",
                                             "manage/resources/public/targets",
+                                            "manage/resources/public/wildcard-resources",
+                                            "manage/resources/public/healthchecks-failover",
                                             "manage/resources/public/raw-resources",
-                                            "manage/resources/public/maintenance",
-                                            "manage/resources/public/healthchecks-failover"
+                                            "manage/resources/public/maintenance"
                                         ]
                                     },
                                     {
