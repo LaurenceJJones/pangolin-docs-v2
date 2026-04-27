@@ -49,6 +49,22 @@ newt --config-file /var/newt.json --endpoint https://app.pangolin.net --provisio
 
 **After the site is provisioned**, Newt writes the new `id` and `secret` into that config file. On later runs, Newt uses those credentials and ignores the provisioning key (CLI flag or file field), because valid ID and secret are already present. If you used `provisioningKey` in JSON, that entry is removed when the file is updated, so the long-lived token is not left on disk.
 
+<Note>
+You do not need to edit the config file by hand after successful provisioning.
+
+- `provisioningKey` in the config file: Newt removes it after provisioning.
+- `--provisioning-key`: Newt does not store it in the config file, but your bootstrap method may still leave it elsewhere on the machine.
+- If you want Newt to remove the key from the config file after provisioning, put `provisioningKey` in the config file before first run.
+</Note>
+
+### Do I need to remove the provisioning key manually?
+
+Usually, no.
+
+- In the Newt config file itself, the answer is no: Newt either removes `provisioningKey` or ignores the one-time key once `id` and `secret` are present.
+- If you passed the key on the command line, there is no Newt config entry to clean up afterward.
+- If you put the key in a startup script, cloud-init file, image, or other bootstrap artifact, remove it there if you do not want it reused.
+
 From there Newt authenticates over the websocket, optionally applies a blueprint if you passed one, then brings the tunnel online. The high-level sequence is summarized below.
 
 <Frame>
@@ -144,4 +160,3 @@ Optionally, sites provisioned with a key can be placed into a pending state. The
 <Frame>
   <img src="/images/pending-sites.png" alt="Pending sites listed for admin review" centered />
 </Frame>
-
