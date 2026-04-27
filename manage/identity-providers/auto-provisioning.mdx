@@ -27,7 +27,7 @@ If auto provision is disabled, organization admins will need to manually create 
   <img src="/images/create-idp-user.png" />
 </Frame>
 
-## Role mappings
+## Role Mappings
 
 When you configure role mappings in auto provisioning settings, you use one of three approaches: fixed roles, mapping builder, or raw expression. These options are available for global identity providers and for organization-only identity providers.
 
@@ -35,7 +35,7 @@ When you configure role mappings in auto provisioning settings, you use one of t
   Auto provisioning does not create roles in Pangolin. Every role you assign whether you pick fixed roles, map IdP values in the builder, or return names from a raw expression must already exist in the target organization, and the name you use must match that role’s name exactly (character-for-character). This one-to-one name match applies to all three mapping types. If a name does not match an existing role, the user will not receive that role (and may not be added to the organization, depending on your setup).
 </Note>
 
-### Fixed roles
+### Role Mapping: Fixed Roles
 
 Fixed roles is the simplest option. Every user who signs in through the identity provider receives the same set of roles. The roles you select must already exist in Pangolin, and you must choose them by their exact names in that organization. Use this when you do not need dynamic mapping and a single role assignment for everyone is enough. You can still change roles on individual users after they have been auto-provisioned. This is the easiest way to get started.
 
@@ -43,7 +43,7 @@ Fixed roles is the simplest option. Every user who signs in through the identity
   <img src="/images/fixed-roles.png" />
 </Frame>
 
-### Mapping builder
+### Role Mapping: Mapping Builder
 
 The mapping builder lets you map roles from your identity provider to Pangolin roles without writing expressions. For example, a user might sign in from Azure and belong to several groups there. Azure identifies those groups with its own internal ID strings. With the mapping builder, you translate those IDs to Pangolin role names in the UI.
 
@@ -53,7 +53,7 @@ First, choose the claim in the OIDC token where roles or groups are provided suc
   <img src="/images/mapping-builder.png" />
 </Frame>
 
-### Raw expression
+### Role Mapping: Raw Expression
 
 Raw expression is the most flexible option and the most complex. It matches how many users previously defined mappings in Pangolin. You provide a [JMESPath](https://jmespath.org/) expression that must evaluate to a string or array of strings. Each value must be the exact name of a role that already exists in the organization. If you can express the logic in JMESPath, it will work (for example, combining conditions on name, email, and other claims).
 
@@ -67,6 +67,8 @@ The expression is evaluated against the token from the identity provider on each
 </Frame>
 
 #### Raw Expression Example: JMESPath role selection
+
+This expression returns `"Admin"` when the user is in the `admin` group, and `"Member"` otherwise.
 
 **Expression:**
 
@@ -97,7 +99,50 @@ contains(groups, 'admin') && 'Admin' || 'Member'
 }
 ```
 
-This expression returns `"Admin"` when the user is in the `admin` group, and `"Member"` otherwise.
+### Organization Mapping
+
+Use this when you want to conditionally evaluate if the user should be added to an organization based on the identity provider data. For example, you can add users to an organization based on their email domain or if they are a member of a specific group.
+
+This is different from the role mapping options because it is not based on the roles assigned to the user, but rather on the organization they should be added to.
+
+The expression will be matched against each organization. Meaning:
+
+- The result of the expression must return true or the organization ID as it is defined in the system.
+- If no matching organization is found, the user will not be added to the organization.
+
+You can insert the template variable `{{orgId}}` in the expression. This will be replaced with the organization ID when the expression is evaluated.
+
+#### Example: Email-based Selection
+
+<Note>
+When entering a string literal in JMESPath, surround it with `'` (single quotes).
+</Note>
+
+This example will return true since the user's email ends with @acme.com. Use this if you want to add users to an organization based on their email domain.
+
+**Expression:**
+```
+ends_with(email, '@acme.com')
+```
+
+**Identity Provider Data:**
+```json
+{
+   ...
+    "sub": "9590c3bfccd1b1a54b35845fb1bb950057dfa50fba43cb8bada58b462c80e207",
+    "aud": "JJoSvHCZcxnXT2sn6CObj6a21MuKNRXs3kN5wbys",
+    "exp": 1745790819,
+    "iat": 1745789019,
+    "auth_time": 1745789019,
+    "email": "user@acme.com",
+    "email_verified": true,
+    "name": "Example User",
+    "groups": [
+        "home-lab",
+        "admin"
+    ]
+}
+```
 
 ## Global Identity Providers
 
@@ -129,82 +174,15 @@ It is helpful to think of the auto provisioning process as follows:
 
 Use a default policy, per-organization policies, or both. Role mapping options (fixed roles, mapping builder, raw expression) work the same way as described in [Role mappings](#role-mappings).
  
-### Selecting Organizations
-
-Use JMESPath to map attributes from the identity provider to organizations in Pangolin. See [JMESPath](https://jmespath.org/) for more information on how to use JMESPath.
-
-The expression will be matched against each organization. Meaning:
-
-- The result of the expression must return true or the organization ID as it is defined in the system.
-- If no matching organization is found, the user will not be added to the organization.
-
-You can insert the template variable `{{orgId}}` in the expression. This will be replaced with the organization ID when the expression is evaluated.
-
-### Example 1: Group-based Selection
-
-**Expression:**
-```
-contains(groups, 'home-lab')
-```
-
-**Identity Provider Data:**
-```json
-{
-   ...
-    "sub": "9590c3bfccd1b1a54b35845fb1bb950057dfa50fba43cb8bada58b462c80e207",
-    "aud": "JJoSvHCZcxnXT2sn6CObj6a21MuKNRXs3kN5wbys",
-    "exp": 1745790819,
-    "iat": 1745789019,
-    "auth_time": 1745789019,
-    "email": "user@example.com",
-    "email_verified": true,
-    "name": "Example User",
-    "groups": [
-        "home-lab",
-        "admin"
-    ]
-}
-```
-
-This example will return true since the user is a member of the "home-lab" group.
-
-### Example 2: Fixed Organization
-
-<Note>
-When entering a string literal in JMESPath, surround it with `'` (single quotes). See below:
-</Note>
-
-**Expression:**
-```
-'home-lab'
-```
-
-**Identity Provider Data:**
-```json
-{
-   ...
-    "sub": "9590c3bfccd1b1a54b35845fb1bb950057dfa50fba43cb8bada58b462c80e207",
-    "aud": "JJoSvHCZcxnXT2sn6CObj6a21MuKNRXs3kN5wbys",
-    "exp": 1745790819,
-    "iat": 1745789019,
-    "auth_time": 1745789019,
-    "email": "user@example.com",
-    "email_verified": true,
-    "name": "Example User",
-    "groups": [
-        "home-lab",
-        "admin"
-    ]
-}
-```
-
 ### Default (Fallback) Policy
 
 You can optionally configure a default policy for all organizations. This will be used if the organization does not have its own policy configured.
 
 This example will always return 'home-lab' meaning the user will always be added to the "home-lab" organization.
 
-### Example 1: Dynamic Organization Selection
+### Example: Dynamic Organization Selection with Interpolation
+
+When Pangolin evaluates this expression against the "home-lab" organization, it will replace `{{orgId}}` with "home-lab". The result of the expression will return true since the user is a member of the "home-lab" group.
 
 **Expression:**
 ```
@@ -229,5 +207,3 @@ contains(groups, '{{orgId}}')
     ]
 }
 ```
-
-When Pangolin evaluates this expression against the "home-lab" organization, it will replace `{{orgId}}` with "home-lab". The result of the expression will return true since the user is a member of the "home-lab" group.

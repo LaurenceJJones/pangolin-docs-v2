@@ -37,6 +37,10 @@ Organization only identity providers appear only on the organization login page.
 	Available in [Pangolin Cloud](https://app.pangolin.net/auth/signup) and [Enterprise Edition](/self-host/enterprise-edition). For [Enterprise Edition](/self-host/enterprise-edition), you must set `app.identity_provider_mode: "org"` in the [private config file](/self-host/advanced/private-config-file#param-identity-provider-mode) `privateConfig.yml`.
 </Note>
 
+#### Sharing an identity provider across organizations
+
+To share an organization-only identity provider across more than one organization, use the import feature. On the Identity Providers table in your organization, click Add Identity Provider and choose Import. You will see identity providers from other organizations where you are an administrator; you can associate another organization’s IdP with the current organization. Configure [auto provisioning](/manage/identity-providers/auto-provisioning) settings separately for each organization, since each organization has its own roles.
+
 ### Global Identity Providers
 
 Global identity providers are managed at the server level and not the individual organization. They can apply to all or some organizations on the server. This means you must define policies per organization to map users to specific organizations and roles within those organizations. 
