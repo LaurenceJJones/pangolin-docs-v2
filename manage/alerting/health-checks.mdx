@@ -25,6 +25,10 @@ Under Alerting → Health checks for your organization, you get a single view of
 
 ### Arbitrary Health Checks
 
+<Note>
+Arbitrary health checks are only available in [Pangolin Cloud](https://app.pangolin.net/auth/signup) and [Enterprise Edition](/self-host/enterprise-edition). Health checks attached to public resource targets are available in all editions.
+</Note>
+
 In addition to target-linked checks, you can create standalone health checks that are not attached to any routable resource target. They work the same way at the probe layer, with the same protocols and timing concepts, but only represent reachability for an address your sites can reach (for example an IP or hostname on a remote LAN). You choose which site runs the check so it stays within an addressable range for that connector.
 
 These are useful when you care about whether a system is up, even if it is not modeled as a Pangolin resource like a network printer, an IP camera, a legacy server, or anything else that should be watched from the site’s network. Pair them with [Alert rules](/manage/alerting/alert-rules) to send notifications when something goes unhealthy or recovers.
