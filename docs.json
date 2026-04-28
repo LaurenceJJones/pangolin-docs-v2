@@ -138,6 +138,14 @@
                                 ]
                             },
                             {
+                                "group": "Alerting",
+                                "icon": "bell",
+                                "pages": [
+                                    "manage/alerting/alert-rules",
+                                    "manage/alerting/health-checks"
+                                ]
+                            },
+                            {
                                 "group": "Blueprints",
                                 "icon": "file-code",
                                 "pages": [
