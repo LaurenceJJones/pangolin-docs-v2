@@ -66,7 +66,10 @@
                                         "pages": [
                                             "manage/resources/private/authentication",
                                             "manage/resources/private/destinations",
-                                            "manage/resources/private/alias"
+                                            "manage/resources/private/port-restrictions",
+                                            "manage/resources/private/alias",
+                                            "manage/resources/private/private-http",
+                                            "manage/resources/private/multi-site-routing"
                                         ]
                                     }
                                 ]
@@ -392,6 +395,10 @@
         {
             "source": "manage/healthchecks-failover",
             "destination": "manage/resources/public/healthchecks-failover"
+        },
+        {
+            "source": "/manage/resources/private/icmp-access",
+            "destination": "/manage/resources/private/port-restrictions"
         }
     ],
     "seo": {

@@ -1,0 +1,34 @@
+---
+title: "Private HTTP"
+description: "HTTPS private resources on your domain with a connected client—Pangolin Cloud and Enterprise; reverse proxy and TLS on the site"
+---
+
+import PangolinCloudTocCta from "/snippets/pangolin-cloud-toc-cta.mdx";
+
+<PangolinCloudTocCta />
+
+<Note>
+Only available in [Pangolin Cloud](https://app.pangolin.net/auth/signup) and [Enterprise Edition](/self-host/enterprise-edition).
+</Note>
+
+Private HTTP is a special kind of private resource for web workloads. It behaves similarly to a [public resource](/manage/resources/understanding-resources#public-resources) in that traffic is HTTP-based and flows through a reverse proxy with a proper hostname, but it only works when the user has an active Pangolin client connection. Nothing is exposed on the public internet; access is entirely off the internet until someone is on the tunnel.
+
+## Hostname, DNS, and TLS
+
+When you enable private HTTP, you assign a domain name to the resource. That hostname must be a domain you have already added and configured in Pangolin (see [Domains](/manage/domains)). This is analogous to an [alias](/manage/resources/private/alias) in that the client resolves the name through Pangolin and traffic is steered to the correct site, but it is not the same system: the name must be a real domain managed in your organization, not an arbitrary internal alias.
+
+You can enable SSL on the resource so Pangolin obtains and serves a valid certificate for that hostname. When a connected user opens the site in a browser, the request is resolved to the site the same way as with alias-style flows, but a reverse proxy running on the site terminates TLS and proxies the request downstream to your [destination](/manage/resources/private/destinations). The Pangolin control plane provisions the routing and pushes certificates to the edge where your site runs, so users get normal HTTPS without certificate warnings.
+
+## Destination Fields
+
+The destination block for a private HTTP resource is closer to a [target](/manage/resources/public/targets) on a public resource than to a plain private resource: in addition to the upstream hostname or IP, you set a destination port and a scheme (`http` or `https`). Those values are required so the site knows how to open the connection to the backend after TLS is terminated at the proxy.
+
+## Compared to an IP Resource and an Alias
+
+You can approximate private browsing with a standard private resource by pairing an IP or internal hostname with an [alias](/manage/resources/private/alias) and a port. In practice you would still visit something like `https://your-alias.example:8443/` (or HTTP without a trusted name), and the browser will not show a normal publicly trusted certificate for that pattern the way it does for a first-class HTTPS hostname. Private HTTP is meant for the case where you want a real FQDN on your Pangolin domain with valid TLS and default ports, similar to a public resource, while keeping the surface client-only.
+
+## Compared to a Public Resource
+
+A [public resource](/manage/resources/public/authentication) is reachable from the internet; Pangolin sits in front with authentication (for example platform SSO or other methods) so unauthenticated requests are blocked at the edge—the “bouncer” in front of a public site.
+
+Private HTTP does not use that public forward-auth model for reachability. The hostname does not grant access from the open internet at all. The user must connect with the Pangolin client first, like a VPN, before the domain resolves and the reverse proxy will serve the app. Authentication on who may use the resource still follows your private resource access rules (users, roles, machines), but the network path is client-attached only.
