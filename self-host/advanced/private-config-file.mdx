@@ -201,6 +201,15 @@ This section contains the complete reference for all configuration options in `p
         use_org_only_idp: true
       ```
     </ResponseField>
+
+    <ResponseField name="enable_acme_cert_sync" type="boolean" default="true">
+      Enable automatic synchronization of ACME certificates for TLS termination on private resources.
+      
+      ```yaml
+      flags:
+        enable_acme_cert_sync: true
+      ```
+    </ResponseField>
     
     <ResponseField name="enable_redis" type="boolean" default="false">
       Enable Redis for caching and session management. Requires `redis` configuration.
@@ -217,6 +226,41 @@ This section contains the complete reference for all configuration options in `p
       ```yaml
       flags:
         use_pangolin_dns: true
+      ```
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### ACME Configuration
+
+<ResponseField name="acme" type="object">
+  Configuration for ACME certificate synchronization. Used in conjunction with `flags.enable_acme_cert_sync` to synchronize TLS certificates issued by Traefik (or another ACME client) into Pangolin for use on private resources.
+
+  <Expandable title="properties">
+    <ResponseField name="acme_json_path" type="string" default="config/letsencrypt/acme.json">
+      Path to the `acme.json` file produced by Traefik (or another ACME client). Pangolin reads this file to extract certificates for synchronization.
+      
+      ```yaml
+      acme:
+        acme_json_path: "config/letsencrypt/acme.json"
+      ```
+    </ResponseField>
+
+    <ResponseField name="resolver" type="string" default="letsencrypt">
+      Name of the ACME resolver entry within the `acme.json` file to read certificates from. This must match the resolver name configured in your Traefik (or other ACME client) setup.
+      
+      ```yaml
+      acme:
+        resolver: "letsencrypt"
+      ```
+    </ResponseField>
+
+    <ResponseField name="sync_interval_ms" type="number" default="5000">
+      Interval in milliseconds at which Pangolin polls the `acme.json` file for certificate changes.
+      
+      ```yaml
+      acme:
+        sync_interval_ms: 5000
       ```
     </ResponseField>
   </Expandable>
