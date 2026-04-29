@@ -246,15 +246,6 @@ This section contains the complete reference for all configuration options in `p
       ```
     </ResponseField>
 
-    <ResponseField name="resolver" type="string" default="letsencrypt">
-      Name of the ACME resolver entry within the `acme.json` file to read certificates from. This must match the resolver name configured in your Traefik (or other ACME client) setup.
-      
-      ```yaml
-      acme:
-        resolver: "letsencrypt"
-      ```
-    </ResponseField>
-
     <ResponseField name="sync_interval_ms" type="number" default="5000">
       Interval in milliseconds at which Pangolin polls the `acme.json` file for certificate changes.
       
