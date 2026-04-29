@@ -129,7 +129,8 @@ private-resources:
   ssh-host:
     name: SSH Host
     mode: host
-    site: my-site
+    sites:
+      - my-site
     destination: 192.168.1.10
     tcp-ports: "22"
     roles:
@@ -282,9 +283,10 @@ Private resources define what Pangolin clients can reach after they connect to y
 
 - Use **`mode: host`** for a single host or DNS name
 - Use **`mode: cidr`** for an entire network range
+- Use **`mode: http`** to expose an internal HTTP endpoint to clients via a private domain
 
 <Note>
-When applying a blueprint via Newt (using `--blueprint-file` or container labels), `site` is optional. If omitted, the resource is assigned to the site of the Newt that applied the blueprint.
+When applying a blueprint via Newt (using `--blueprint-file` or container labels), `sites` is optional. If omitted, the resource is assigned to the site of the Newt that applied the blueprint.
 </Note>
 
 ```yaml
@@ -293,7 +295,8 @@ private-resources:
     name: Internal Network
     mode: cidr
     destination: 10.0.0.0/24
-    site: my-site
+    sites:
+      - my-site
     tcp-ports: "22,443,8000-9000"
     udp-ports: "53,123"
     disable-icmp: false
@@ -304,6 +307,19 @@ private-resources:
       - user@example.com
     machines:
       - machine-id-1
+
+  internal-app:
+    name: Internal App
+    mode: http
+    destination: 10.0.0.5
+    destination-port: 8080
+    sites:
+      - my-site
+    full-domain: app.internal.example.com
+    ssl: true
+    scheme: https
+    roles:
+      - Member
 ```
 
 ## Container Labels Format
@@ -433,7 +449,8 @@ private-resources:
   ssh-host:
     name: SSH Host
     mode: host
-    site: my-site
+    sites:
+      - my-site
     destination: 192.168.1.10
     tcp-ports: "22"
 
@@ -966,7 +983,8 @@ private-resources:
   internal-net:
     name: Internal Network
     mode: cidr
-    site: my-site
+    sites:
+      - my-site
     destination: 10.0.0.0/24
     tcp-ports: "22,443"
     udp-ports: "53"
@@ -978,6 +996,17 @@ private-resources:
       - user@example.com
     machines:
       - machine-id-1
+
+  internal-app:
+    name: Internal App
+    mode: http
+    sites:
+      - my-site
+    destination: 10.0.0.5
+    destination-port: 8080
+    full-domain: app.internal.example.com
+    ssl: true
+    scheme: https
 ```
 
 <Expandable title="Private resource reference">
@@ -995,24 +1024,71 @@ private-resources:
       <ResponseField name="mode" type="string" required>
         Private resource type.
 
-        **Options**: `host`, `cidr`
+        **Options**: `host`, `cidr`, `http`
+
+        - `host`: A single host or IP. If `destination` is a domain, `alias` is required.
+        - `cidr`: An entire IPv4 or IPv6 CIDR range.
+        - `http`: An internal HTTP endpoint exposed to clients via `full-domain`.
 
         YAML: `mode: cidr`  
         Container label: `pangolin.private-resources.internal-net.mode=cidr`
       </ResponseField>
 
-      <ResponseField name="site" type="string">
-        Site that hosts the resource. Optional when deploying from a Newt — if omitted, the resource is assigned to the site of the Newt that applied the blueprint.
+      <ResponseField name="sites" type="array of strings">
+        Sites that host the resource. Optional when deploying from a Newt — if omitted, the resource is assigned to the site of the Newt that applied the blueprint.
+
+        Container labels for arrays must include an index (`[0]`, `[1]`, ...).
+
+        YAML: `sites: [my-site]`  
+        Container label: `pangolin.private-resources.internal-net.sites[0]=my-site`
+      </ResponseField>
+
+      <ResponseField name="site" type="string" deprecated>
+        Deprecated. Use `sites` instead.
 
         YAML: `site: my-site`  
         Container label: `pangolin.private-resources.internal-net.site=my-site`
       </ResponseField>
 
       <ResponseField name="destination" type="string" required>
-        Host, IP, or CIDR block the client should reach.
+        Host, IP, or CIDR block the client should reach. The accepted format depends on `mode`:
+
+        - `host`: a valid IPv4/IPv6 address, or a hostname/domain (when using a domain, `alias` must also be set)
+        - `cidr`: a valid IPv4 or IPv6 CIDR block
+        - `http`: a host or IP for the upstream HTTP endpoint
 
         YAML: `destination: 10.0.0.0/24`  
         Container label: `pangolin.private-resources.internal-net.destination=10.0.0.0/24`
+      </ResponseField>
+
+      <ResponseField name="destination-port" type="integer">
+        Upstream port for the destination. Typically used with `mode: http` to point at the internal HTTP endpoint's port.
+
+        YAML: `destination-port: 8080`  
+        Container label: `pangolin.private-resources.internal-app.destination-port=8080`
+      </ResponseField>
+
+      <ResponseField name="full-domain" type="string">
+        Internal domain used to expose an HTTP private resource to clients. Applies when `mode: http`.
+
+        YAML: `full-domain: app.internal.example.com`  
+        Container label: `pangolin.private-resources.internal-app.full-domain=app.internal.example.com`
+      </ResponseField>
+
+      <ResponseField name="ssl" type="boolean">
+        Whether SSL/TLS should be used when serving the private HTTP resource.
+
+        YAML: `ssl: true`  
+        Container label: `pangolin.private-resources.internal-app.ssl=true`
+      </ResponseField>
+
+      <ResponseField name="scheme" type="string">
+        Upstream scheme used by Pangolin to reach the destination for HTTP private resources.
+
+        **Options**: `http`, `https`
+
+        YAML: `scheme: https`  
+        Container label: `pangolin.private-resources.internal-app.scheme=https`
       </ResponseField>
 
       <ResponseField name="tcp-ports" type="string">
@@ -1043,14 +1119,14 @@ private-resources:
       </ResponseField>
 
       <ResponseField name="alias" type="string">
-        Internal DNS alias for the resource.
+        Internal DNS alias for the resource. Must be a fully qualified domain name and may include wildcards (`*`, `?`), e.g. `example.com`, `*.example.com`, or `host-0?.example.internal`. Required when `mode: host` and `destination` is a domain.
 
         YAML: `alias: "*.internal.example.com"`  
         Container label: `pangolin.private-resources.internal-net.alias=*.internal.example.com`
       </ResponseField>
 
       <ResponseField name="roles" type="array of strings">
-        Roles allowed to access the resource.
+        Roles allowed to access the resource. The `Admin` role is reserved and cannot be listed here.
 
         Container labels for arrays must include an index (`[0]`, `[1]`, ...).
 
