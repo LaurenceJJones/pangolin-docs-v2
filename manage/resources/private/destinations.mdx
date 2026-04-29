@@ -1,41 +1,55 @@
 ---
 title: "Destinations"
-description: "Understand connection options to the remote network"
+description: "What a private resource destination is and how to define it (FQDN, IP, or CIDR)"
 ---
 
 import PangolinCloudTocCta from "/snippets/pangolin-cloud-toc-cta.mdx";
 
 <PangolinCloudTocCta />
 
+## What is a destination?
 
+A destination is the network location your site can route to for a private resource: a single host IP address, an IP CIDR range, or a fully qualified domain name (FQDN). Every private resource must have a destination—it tells Pangolin where the resource lives on the remote network and how the site should reach it.
 
-A Resource's **destination** can be defined in several ways:
+When a user connects with the Pangolin client and has access to that resource, their traffic is steered toward the address or range defined by the destination.
 
-* **Fully Qualified Domain Name (FQDN):** For example, `host.autoco.internal`.
-* **IP Address:** For example, `10.1.0.35`.
-* **IP CIDR Range:** For example, `10.1.0.0/16`.
+That role is similar to a [target](/manage/resources/public/targets) on a public resource: both tell Pangolin where to send traffic after it enters the platform. For public resources, traffic typically arrives from the internet; for private resources, it comes from other clients already connected to your organization.
 
-When defining a Resource with an FQDN, the Pangolin site will resolve the FQDN to an IP address on the remote network. This allows you to create Resources that point to hosts whose IP addresses may change over time, as long as the FQDN remains consistent.
+You can optionally add an [alias](/manage/resources/private/alias) so people use a memorable hostname instead of the raw destination, or so overlapping IPs across sites resolve predictably (see [Overlapping destinations across sites](#overlapping-destinations-across-sites) below). In some setups an alias is required—for example when the destination is loopback on the site host ([Loopback on the site host](#loopback-on-the-site-host)).
 
-When defining a Resource with an IP address, the Pangolin client will connect directly to that specific IP address on the remote network. It will insert routes for that single IP address into the network route table of the host when users connect with the client.
+## Defining a Destination
 
-When defining a Resource with a CIDR range, all IP addresses within that range will be accessible to users who have been granted access to the Resource. This is useful for providing access to entire subnets or network segments. It will insert routes for that single IP address into the network route table of the host when users connect with the client.
+A private resource destination is always exactly one of the following: a single host IP, a CIDR range, or a FQDN.
+
+### IP Address
+
+Use a single IP address for one host on the remote network—for example, `10.1.0.35`. The Pangolin client installs a route for that host when the user connects with access to the resource, and traffic to that IP is carried over the tunnel to the site, which delivers it on the remote network.
+
+### Loopback on the Site Host
+
+If the service lives on the same machine as the Pangolin site, you can set the destination to `127.0.0.1` or `localhost`. The site then routes to its own loopback interface, which is where that process is listening.
+
+On the user’s machine, `localhost` and `127.0.0.1` always mean that machine, not the remote site. Telling someone to open `http://127.0.0.1:8080` in a browser would hit their laptop, not the site.
+
+So you must add an [alias](/manage/resources/private/alias)—for example a hostname only resolvable through Pangolin, such as `metrics.site-internal.example`—and have people use that name to connect. The client resolves the alias via Pangolin, sends traffic over the tunnel, and the site forwards it to `127.0.0.1` / `localhost` on its side. This is an example where an alias is required and where it resolves overlapping or conflicting meanings of the same address between the client and the site.
+
+### CIDR Range
+
+Use an IP CIDR range when many addresses should be reachable as one resource—for example, `10.1.0.0/16`. Any address inside the range is covered for users who have been granted access. The client installs routing for that prefix when they connect. This is the usual choice for whole subnets or segments instead of listing hosts one by one.
+
+### FQDN
+
+Use a fully qualified domain name when the resource is identified by DNS on the remote network—for example, `host.autoco.internal`. The Pangolin site resolves that hostname to an IP address on the network behind the site. That is a good fit when the host’s address can change but the name stays the same.
+
+Another pattern is routing traffic destined for a public SaaS hostname through a Pangolin site using the client. For example, you can configure a private resource whose destination is `google.com`. When a user with access opens `google.com` in the browser, the client sends that traffic over the tunnel to the site. Because the site treats `google.com` as the resource’s destination, it proxies that traffic out to the internet from the site’s egress. The flow is: client → tunnel → site → upstream host, instead of the client reaching the host directly on its local path.
 
 ### Additional Notes on Resource Destinations
 
-* **Reserved IP Addresses:** The Pangolin client reserves the CGNAT subnet 100.96.128.0/24. Accessing resources via an IP address within this reserved range will be blocked by the client, though its use is uncommon. This range can be configured for newly created orgs in the self-hosted Pangolin configuration file.
-* **Resource Destination Resolution:** The configured address of the Resource is resolved by the site the resource points to. Make sure the site can resolve the address correctly.
+* Reserved IP Addresses: The Pangolin client reserves the CGNAT subnet 100.96.128.0/24. Accessing resources via an IP address within this reserved range will be blocked by the client, though its use is uncommon. This range can be configured for newly created orgs in the self-hosted Pangolin configuration file.
+* Resource Destination Resolution: The configured address of the Resource is resolved by the site the resource points to. Make sure the site can resolve the address correctly.
 
-### What about overlaps?
+### Overlapping destinations across sites
 
 Pangolin smooths away overlapping networks and arbitrarily chooses a single site to resolve the IP address or range to. This is because we want connection requests to any Resource to be as simple as possible for the end users: when they connect to a particular IP address or FQDN, Pangolin figures out which site to send it to and the end user never needs to figure this out.
 
-It is recommended that you create overlapping resources only if absolutely required. If you do, use [Aliases](/manage/resources/private/alias) to explicitly defined which host should be used for a given FQDN or IP address and use the alias to connect.
-
-### ICMP End to End?
-
-Pangolin supports testing connectivity to Resources using ICMP ping requests. However, it's important to note that while the Pangolin client can send ICMP echo requests to the destination, **the actual ping request is captured and replayed from the Newt binary to the actually destination**. This means that requests are not end to end but are still an effective way to test connectivity to a resource.
-
-### Unicast Only?
-
-Right now unicast TCP and UDP traffic is supported through the Pangolin client. Multicast and broadcast traffic is not supported at this time.
+It is recommended that you create overlapping resources only if absolutely required. If you do, use [Aliases](/manage/resources/private/alias) to explicitly define which host should be used for a given FQDN or IP address and use the alias to connect.

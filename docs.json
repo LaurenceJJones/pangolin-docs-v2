@@ -55,9 +55,10 @@
                                         "pages": [
                                             "manage/resources/public/authentication",
                                             "manage/resources/public/targets",
+                                            "manage/resources/public/wildcard-resources",
+                                            "manage/resources/public/healthchecks-failover",
                                             "manage/resources/public/raw-resources",
-                                            "manage/resources/public/maintenance",
-                                            "manage/resources/public/healthchecks-failover"
+                                            "manage/resources/public/maintenance"
                                         ]
                                     },
                                     {
@@ -65,7 +66,10 @@
                                         "pages": [
                                             "manage/resources/private/authentication",
                                             "manage/resources/private/destinations",
-                                            "manage/resources/private/alias"
+                                            "manage/resources/private/port-restrictions",
+                                            "manage/resources/private/alias",
+                                            "manage/resources/private/private-http",
+                                            "manage/resources/private/multi-site-routing"
                                         ]
                                     }
                                 ]
@@ -134,6 +138,14 @@
                                 ]
                             },
                             {
+                                "group": "Alerting",
+                                "icon": "bell",
+                                "pages": [
+                                    "manage/alerting/alert-rules",
+                                    "manage/alerting/health-checks"
+                                ]
+                            },
+                            {
                                 "group": "Blueprints",
                                 "icon": "file-code",
                                 "pages": [
@@ -182,6 +194,7 @@
                                     "self-host/advanced/enable-asnblocking",
                                     "self-host/advanced/metrics",
                                     "self-host/advanced/clustering",
+                                    "self-host/advanced/traefik-log-rotation",
                                     "self-host/telemetry"
                                 ]
                             },
@@ -390,6 +403,10 @@
         {
             "source": "manage/healthchecks-failover",
             "destination": "manage/resources/public/healthchecks-failover"
+        },
+        {
+            "source": "/manage/resources/private/icmp-access",
+            "destination": "/manage/resources/private/port-restrictions"
         }
     ],
     "seo": {
